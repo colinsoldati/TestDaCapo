@@ -5,29 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>DaCapo - Suivi de Pratique Musicale</title>
 
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script> <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
     <style>
-      @font-face {
-        font-family: 'LucideIcons';
-        src: url(https://cdn.jsdelivr.net/npm/lucide-static@latest/font/Lucide.ttf) format('truetype');
-      }
-      .lucide {
-        font-family: 'LucideIcons';
-        font-size: 1.25rem; /* Adjust size as needed */
-        line-height: 1;
-        font-style: normal;
-        font-weight: normal;
-        font-variant: normal;
-        text-transform: none;
-        speak: none;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-      }
       /* Tailwind configuration */
       tailwind.config = {
         theme: {
@@ -41,6 +23,7 @@
               'brand-white': '#FFFFFF',
               'brand-gray': '#F3F4F6', // Light gray for backgrounds
               'brand-gray-border': '#E5E7EB', // Lighter border color
+              'brand-red': '#DC2626', // Red for delete actions
             }
           }
         }
@@ -51,24 +34,102 @@
           flex-direction: column;
           min-height: 100vh; /* Full viewport height */
           overscroll-behavior-y: contain; /* Prevent pull-to-refresh where possible */
+          background-color: theme('colors.brand-white'); /* Ensure body background */
       }
        main {
            flex-grow: 1; /* Takes remaining space */
            overflow-y: auto; /* Allows scrolling only for main content */
            /* Add padding to prevent content from hiding under fixed header/footer */
-           /* Adjust padding values based on actual header/footer height */
-           padding-top: 4.5rem; /* Approx height of header */
-           padding-bottom: 4.5rem; /* Approx height of nav */
+           padding-top: 5rem; /* Increased slightly */
+           padding-bottom: 5rem; /* Increased slightly */
+       }
+       header, nav {
+           background-color: theme('colors.brand-white'); /* Ensure background for fixed elements */
        }
        /* Style for active nav button */
        .nav-btn[aria-current="page"] {
-           color: #000000; /* brand-black */
+           color: theme('colors.brand-black');
+           font-weight: 600; /* Make active bolder */
        }
        .nav-btn:not([aria-current="page"]) {
-            color: #6B7280; /* gray-500 */
+            color: theme('colors.gray.500');
        }
        .nav-btn:not([aria-current="page"]):hover {
-            color: #111827; /* gray-900 */
+            color: theme('colors.gray.900');
+       }
+       /* Custom button base styles */
+       .btn {
+            display: inline-flex; /* Use inline-flex for alignment */
+            align-items: center;
+            justify-content: center;
+            padding: 0.6rem 1.2rem; /* Adjusted padding */
+            border-radius: 0.5rem; /* More rounded */
+            font-weight: 500; /* Medium weight */
+            font-size: 0.875rem; /* Smaller text */
+            line-height: 1.25rem;
+            transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, color 0.15s ease-in-out;
+            cursor: pointer;
+            border: 1px solid transparent; /* Base border */
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* Subtle shadow */
+       }
+       .btn-primary {
+            background-color: theme('colors.brand-black');
+            color: theme('colors.brand-white');
+            border-color: theme('colors.brand-black');
+       }
+       .btn-primary:hover {
+            background-color: theme('colors.gray.800');
+            border-color: theme('colors.gray.800');
+       }
+       .btn-secondary {
+            background-color: theme('colors.brand-white');
+            color: theme('colors.brand-black');
+            border-color: theme('colors.brand-gray-border');
+       }
+       .btn-secondary:hover {
+            background-color: theme('colors.brand-gray');
+       }
+       .btn-danger {
+            background-color: theme('colors.brand-red');
+            color: theme('colors.brand-white');
+            border-color: theme('colors.brand-red');
+            padding: 0.3rem 0.6rem; /* Smaller padding for delete */
+            font-size: 0.75rem; /* Even smaller text */
+       }
+       .btn-danger:hover {
+            background-color: theme('colors.red.700');
+            border-color: theme('colors.red.700');
+       }
+       .btn-danger-outline {
+            background-color: theme('colors.brand-white');
+            color: theme('colors.brand-red');
+            border-color: theme('colors.red.300');
+            padding: 0.3rem 0.6rem; /* Smaller padding */
+            font-size: 0.75rem; /* Smaller text */
+       }
+       .btn-danger-outline:hover {
+            background-color: theme('colors.red.50');
+            border-color: theme('colors.brand-red');
+       }
+       /* Ensure inputs are styled */
+       input[type="text"], input[type="date"], input[type="number"], select, textarea {
+            border-radius: 0.375rem; /* rounded-md */
+            border-color: theme('colors.brand-gray-border');
+            padding: 0.5rem 0.75rem;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+       }
+       input[type="text"]:focus, input[type="date"]:focus, input[type="number"]:focus, select:focus, textarea:focus {
+            border-color: theme('colors.brand-black');
+            box-shadow: 0 0 0 1px theme('colors.brand-black');
+            outline: none;
+       }
+       select {
+           appearance: none; /* Remove default arrow */
+           background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+           background-position: right 0.5rem center;
+           background-repeat: no-repeat;
+           background-size: 1.5em 1.5em;
+           padding-right: 2.5rem;
        }
 
     </style>
@@ -81,144 +142,141 @@
 </head>
 <body class="bg-brand-white text-brand-black font-sans">
 
-    <header class="bg-brand-white border-b border-brand-gray-border p-4 fixed top-0 left-0 right-0 z-20 h-[4.5rem] flex items-center justify-center">
+    <header class="border-b border-brand-gray-border p-4 fixed top-0 left-0 right-0 z-20 h-[4.5rem] flex items-center justify-center">
         <h1 class="text-2xl font-montserrat font-bold text-center">DaCapo</h1>
     </header>
 
     <main class="container mx-auto p-4 w-full">
 
-        <section id="planification" class="space-y-4">
-            <h2 class="text-xl font-montserrat font-semibold mb-3 border-b border-brand-gray-border pb-1">Planification de Session</h2>
+        <section id="planification" class="space-y-6"> <h2 class="text-xl font-montserrat font-semibold mb-4 border-b border-brand-gray-border pb-2">Planification de Session</h2>
 
-            <div class="bg-brand-gray border border-brand-gray-border rounded-lg p-4 space-y-3 shadow-sm">
-                <h3 class="font-montserrat font-medium">Nouvelle Session</h3>
+            <div class="bg-brand-gray border border-brand-gray-border rounded-lg p-5 space-y-4 shadow-sm"> <h3 class="font-montserrat font-medium text-lg">Nouvelle Session</h3>
                 <div>
-                    <label for="session-date" class="block text-sm font-medium mb-1">Date :</label>
-                    <input type="date" id="session-date" name="session-date" class="w-full p-2 border border-brand-gray-border rounded-md bg-brand-white focus:outline-none focus:ring-1 focus:ring-brand-black">
+                    <label for="session-date" class="block text-sm font-medium mb-1 text-gray-700">Date :</label>
+                    <input type="date" id="session-date" name="session-date" class="w-full bg-brand-white">
                 </div>
                  <div>
-                    <label for="session-goal" class="block text-sm font-medium mb-1">Objectif Principal :</label>
-                    <input type="text" id="session-goal" name="session-goal" placeholder="Ex: Travailler la vélocité sur l'étude X" class="w-full p-2 border border-brand-gray-border rounded-md bg-brand-white focus:outline-none focus:ring-1 focus:ring-brand-black">
+                    <label for="session-goal" class="block text-sm font-medium mb-1 text-gray-700">Objectif Principal :</label>
+                    <input type="text" id="session-goal" name="session-goal" placeholder="Ex: Fluidité arpèges Chopin Op.10 No.1" class="w-full bg-brand-white">
                 </div>
-                <div id="exercices-list" class="space-y-2">
-                    <div class="flex items-center space-x-2">
-                         <input type="text" placeholder="Exercice (gamme, étude, morceau...)" class="flex-grow p-2 border border-brand-gray-border rounded-md bg-brand-white focus:outline-none focus:ring-1 focus:ring-brand-black">
-                         <input type="number" placeholder="Durée (min)" min="1" class="w-24 p-2 border border-brand-gray-border rounded-md bg-brand-white focus:outline-none focus:ring-1 focus:ring-brand-black">
-                         <button class="remove-exercice-btn p-2 text-red-600 hover:text-red-800" title="Supprimer">
-                             <span class="lucide">&#xe03f;</span> </button>
-                    </div>
-                </div>
-                <button id="add-exercice-btn" class="w-full flex items-center justify-center p-2 border border-brand-black rounded-md hover:bg-gray-200 transition-colors duration-150 text-brand-black bg-brand-white">
-                    <span class="lucide mr-2">&#xe03b;</span> Ajouter un exercice
-                </button>
-                 <button id="save-plan-btn" class="w-full flex items-center justify-center p-2 border border-transparent bg-brand-black text-brand-white rounded-md hover:bg-gray-800 transition-colors duration-150 mt-2">
-                    <span class="lucide mr-2">&#xe01a;</span> Sauvegarder le Plan (Bientôt)
+
+                <fieldset class="space-y-3">
+                    <legend class="block text-sm font-medium mb-1 text-gray-700">Exercices :</legend>
+                    <div id="exercices-list" class="space-y-3">
+                        <div class="exercice-item flex items-center space-x-2 p-2 bg-white rounded-md border border-brand-gray-border">
+                             <input type="text" placeholder="Exercice (gamme, étude, mesure...)" class="exercice-text flex-grow border-none focus:ring-0 bg-transparent p-1">
+                             <input type="number" placeholder="Durée" min="1" class="exercice-duration w-20 border-gray-300 rounded-md focus:ring-brand-black focus:border-brand-black p-1 text-sm">
+                             <span class="text-sm text-gray-500">min</span>
+                             <button type="button" class="remove-exercice-btn btn btn-danger-outline !p-1 !text-xs" title="Supprimer cet exercice">
+                                 Supprimer
+                             </button>
+                        </div>
+                         </div>
+                    <button type="button" id="add-exercice-btn" class="btn btn-secondary w-full">
+                        Ajouter un exercice
+                    </button>
+                </fieldset>
+
+                 <button type="button" id="save-plan-btn" class="btn btn-primary w-full mt-3">
+                    Enregistrer ce Plan
                 </button>
             </div>
 
-             <div class="bg-brand-gray border border-brand-gray-border rounded-lg p-4 shadow-sm">
-                <h3 class="font-montserrat font-medium mb-2">Plans Sauvegardés</h3>
-                <p class="text-sm text-gray-500 italic">Fonctionnalité à venir...</p>
+             <div class="bg-brand-gray border border-brand-gray-border rounded-lg p-5 space-y-3 shadow-sm">
+                <h3 class="font-montserrat font-medium text-lg mb-3">Plans Sauvegardés</h3>
+                <div id="saved-plans-list" class="space-y-3">
+                    <p class="text-sm text-gray-500 italic">Aucun plan sauvegardé pour le moment.</p>
                 </div>
+            </div>
         </section>
 
-        <section id="journal" class="hidden space-y-4">
-            <h2 class="text-xl font-montserrat font-semibold mb-3 border-b border-brand-gray-border pb-1">Journal de Bord</h2>
+        <section id="journal" class="hidden space-y-6">
+            <h2 class="text-xl font-montserrat font-semibold mb-4 border-b border-brand-gray-border pb-2">Journal de Bord</h2>
 
-            <div class="bg-brand-gray border border-brand-gray-border rounded-lg p-4 space-y-3 shadow-sm">
-                 <h3 class="font-montserrat font-medium">Nouvelle Entrée</h3>
+            <div class="bg-brand-gray border border-brand-gray-border rounded-lg p-5 space-y-4 shadow-sm">
+                 <h3 class="font-montserrat font-medium text-lg">Nouvelle Entrée</h3>
                  <div>
-                     <label for="journal-date" class="block text-sm font-medium mb-1">Date :</label>
-                     <input type="date" id="journal-date" name="journal-date" class="w-full p-2 border border-brand-gray-border rounded-md bg-brand-white focus:outline-none focus:ring-1 focus:ring-brand-black">
+                     <label for="journal-date" class="block text-sm font-medium mb-1 text-gray-700">Date :</label>
+                     <input type="date" id="journal-date" name="journal-date" class="w-full bg-brand-white">
                  </div>
                   <div>
-                     <label for="journal-piece" class="block text-sm font-medium mb-1">Pièce Travaillée :</label>
-                     <select id="journal-piece" name="journal-piece" class="w-full p-2 border border-brand-gray-border rounded-md bg-brand-white focus:outline-none focus:ring-1 focus:ring-brand-black appearance-none">
-                         <option value="">-- Sélectionner une pièce --</option>
+                     <label for="journal-piece" class="block text-sm font-medium mb-1 text-gray-700">Pièce Travaillée (Optionnel) :</label>
+                     <select id="journal-piece" name="journal-piece" class="w-full bg-brand-white">
+                         <option value="">-- Sélectionner une pièce du répertoire --</option>
                          </select>
                  </div>
                  <div>
-                     <label for="journal-content" class="block text-sm font-medium mb-1">Notes de pratique :</label>
-                     <textarea id="journal-content" name="journal-content" rows="5" placeholder="Difficultés rencontrées, solutions trouvées, sensations, objectifs atteints..." class="w-full p-2 border border-brand-gray-border rounded-md bg-brand-white focus:outline-none focus:ring-1 focus:ring-brand-black"></textarea>
+                     <label for="journal-content" class="block text-sm font-medium mb-1 text-gray-700">Notes de pratique :</label>
+                     <textarea id="journal-content" name="journal-content" rows="5" placeholder="Difficultés rencontrées, solutions trouvées, sensations, objectifs atteints..." class="w-full bg-brand-white"></textarea>
                  </div>
-                 <button id="save-journal-btn" class="w-full flex items-center justify-center p-2 border border-transparent bg-brand-black text-brand-white rounded-md hover:bg-gray-800 transition-colors duration-150">
-                     <span class="lucide mr-2">&#xe01a;</span> Enregistrer l'entrée
+                 <button type="button" id="save-journal-btn" class="btn btn-primary w-full">
+                     Enregistrer l'entrée
                  </button>
              </div>
 
-             <div class="bg-brand-gray border border-brand-gray-border rounded-lg p-4 shadow-sm">
-                <h3 class="font-montserrat font-medium mb-2">Entrées Précédentes</h3>
+             <div class="bg-brand-gray border border-brand-gray-border rounded-lg p-5 space-y-4 shadow-sm">
+                <h3 class="font-montserrat font-medium text-lg mb-3">Entrées Précédentes</h3>
                 <div id="journal-entries" class="space-y-4">
                     <p class="text-sm text-gray-500 italic">Aucune entrée pour le moment.</p>
                 </div>
             </div>
         </section>
 
-        <section id="progres" class="hidden space-y-4">
-            <h2 class="text-xl font-montserrat font-semibold mb-3 border-b border-brand-gray-border pb-1">Analyse des Progrès</h2>
-             <div class="bg-brand-gray border border-brand-gray-border rounded-lg p-4 shadow-sm">
-                <h3 class="font-montserrat font-medium mb-2">Statistiques (Exemple)</h3>
-                <p>Nombre d'entrées dans le journal : <span id="journal-entry-count">0</span></p>
-                <p class="text-sm text-gray-500 italic mt-4">Des graphiques et analyses plus détaillés seront ajoutés ici.</p>
-                <div id="charts-container" class="mt-4">
-                     </div>
-            </div>
-        </section>
+        <section id="bibliotheque" class="hidden space-y-6">
+            <h2 class="text-xl font-montserrat font-semibold mb-4 border-b border-brand-gray-border pb-2">Mon Répertoire</h2>
 
-        <section id="bibliotheque" class="hidden space-y-4">
-            <h2 class="text-xl font-montserrat font-semibold mb-3 border-b border-brand-gray-border pb-1">Mon Répertoire</h2>
-
-            <div class="bg-brand-gray border border-brand-gray-border rounded-lg p-4 space-y-3 shadow-sm">
-                 <h3 class="font-montserrat font-medium">Ajouter une Pièce</h3>
+            <div class="bg-brand-gray border border-brand-gray-border rounded-lg p-5 space-y-4 shadow-sm">
+                 <h3 class="font-montserrat font-medium text-lg">Ajouter une Pièce</h3>
                  <div>
-                     <label for="piece-name" class="block text-sm font-medium mb-1">Nom de la pièce :</label>
-                     <input type="text" id="piece-name" name="piece-name" placeholder="Ex: Sonate K.545, 1er Mvt" class="w-full p-2 border border-brand-gray-border rounded-md bg-brand-white focus:outline-none focus:ring-1 focus:ring-brand-black">
+                     <label for="piece-title" class="block text-sm font-medium mb-1 text-gray-700">Titre :</label>
+                     <input type="text" id="piece-title" name="piece-title" placeholder="Ex: Sonate 'Pathétique', Op. 13" class="w-full bg-brand-white">
+                 </div>
+                 <div>
+                     <label for="piece-composer" class="block text-sm font-medium mb-1 text-gray-700">Compositeur :</label>
+                     <input type="text" id="piece-composer" name="piece-composer" placeholder="Ex: Ludwig van Beethoven" class="w-full bg-brand-white">
                  </div>
                   <div>
-                     <label for="piece-category" class="block text-sm font-medium mb-1">Catégorie :</label>
-                     <select id="piece-category" name="piece-category" class="w-full p-2 border border-brand-gray-border rounded-md bg-brand-white focus:outline-none focus:ring-1 focus:ring-brand-black appearance-none">
+                     <label for="piece-category" class="block text-sm font-medium mb-1 text-gray-700">Genre :</label>
+                     <select id="piece-category" name="piece-category" class="w-full bg-brand-white">
                          </select>
                  </div>
-                 <button id="add-piece-btn" class="w-full flex items-center justify-center p-2 border border-transparent bg-brand-black text-brand-white rounded-md hover:bg-gray-800 transition-colors duration-150">
-                     <span class="lucide mr-2">&#xe03b;</span> Ajouter la pièce
+                 <button type="button" id="add-piece-btn" class="btn btn-primary w-full">
+                     Ajouter la pièce
                  </button>
             </div>
 
-            <div class="bg-brand-gray border border-brand-gray-border rounded-lg p-4 shadow-sm">
-                <h3 class="font-montserrat font-medium mb-2">Pièces Enregistrées</h3>
-                <div id="pieces-list" class="space-y-3">
+            <div class="bg-brand-gray border border-brand-gray-border rounded-lg p-5 space-y-4 shadow-sm">
+                <h3 class="font-montserrat font-medium text-lg mb-3">Pièces Enregistrées</h3>
+                <div id="pieces-list" class="space-y-4">
                     <p class="text-sm text-gray-500 italic">Aucune pièce enregistrée pour le moment.</p>
                 </div>
             </div>
         </section>
 
-         <div id="message-box" class="fixed bottom-[5.5rem] right-4 bg-brand-black text-brand-white p-3 rounded-lg shadow-md hidden transition-opacity duration-300 z-50 max-w-xs">
-            <span id="message-text"></span>
-            <button onclick="document.getElementById('message-box').classList.add('hidden')" class="ml-4 font-bold absolute top-1 right-2 text-sm">X</button>
+         <div id="message-box" class="fixed bottom-[5.5rem] right-4 bg-brand-black text-brand-white p-4 rounded-lg shadow-lg hidden transition-opacity duration-300 z-50 max-w-xs">
+            <div class="flex justify-between items-center">
+                 <span id="message-text" class="text-sm"></span>
+                 <button onclick="document.getElementById('message-box').style.opacity = 0; setTimeout(() => document.getElementById('message-box').classList.add('hidden'), 300);" class="ml-3 text-gray-300 hover:text-white">&times;</button>
+            </div>
         </div>
 
     </main>
 
-    <nav class="bg-brand-white border-t border-brand-gray-border p-2 fixed bottom-0 left-0 right-0 z-20 h-[4.5rem] flex items-center">
-        <ul class="flex justify-around w-full">
-            <li>
-                <button data-target="planification" class="nav-btn flex flex-col items-center p-2 rounded-md" aria-current="page">
-                    <span class="lucide">&#xe4bc;</span> <span class="text-xs font-medium mt-1">Plan</span>
+    <nav class="border-t border-brand-gray-border p-2 fixed bottom-0 left-0 right-0 z-20 h-[4.5rem] flex items-center">
+        <ul class="grid grid-cols-3 gap-2 w-full">
+            <li class="flex justify-center">
+                <button type="button" data-target="planification" class="nav-btn flex flex-col items-center p-2 rounded-md text-center w-full" aria-current="page">
+                    <span class="text-xs font-medium mt-1">Planification</span>
                 </button>
             </li>
-            <li>
-                <button data-target="journal" class="nav-btn flex flex-col items-center p-2 rounded-md">
-                    <span class="lucide">&#xe9d3;</span> <span class="text-xs font-medium mt-1">Journal</span>
+            <li class="flex justify-center">
+                <button type="button" data-target="journal" class="nav-btn flex flex-col items-center p-2 rounded-md text-center w-full">
+                    <span class="text-xs font-medium mt-1">Journal</span>
                 </button>
             </li>
-            <li>
-                <button data-target="progres" class="nav-btn flex flex-col items-center p-2 rounded-md">
-                    <span class="lucide">&#xe151;</span> <span class="text-xs font-medium mt-1">Progrès</span>
-                </button>
-            </li>
-            <li>
-                <button data-target="bibliotheque" class="nav-btn flex flex-col items-center p-2 rounded-md">
-                   <span class="lucide">&#xe938;</span> <span class="text-xs font-medium mt-1">Répertoire</span>
+            <li class="flex justify-center">
+                <button type="button" data-target="bibliotheque" class="nav-btn flex flex-col items-center p-2 rounded-md text-center w-full">
+                   <span class="text-xs font-medium mt-1">Répertoire</span>
                 </button>
             </li>
         </ul>
@@ -228,7 +286,8 @@
         // --- Constants ---
         const PIECES_STORAGE_KEY = 'dacapoPieces';
         const JOURNAL_STORAGE_KEY = 'dacapoJournalEntries';
-        const PIECE_CATEGORIES = ["Sonate", "Concerto", "Caprice/Etude", "Prélude", "Fugue", "Nocturne", "Valse", "Impromptu", "Autre"];
+        const PLANS_STORAGE_KEY = 'dacapoPlans'; // New key for plans
+        const PIECE_CATEGORIES = ["Sonate", "Concerto", "Caprice/Etude", "Prélude", "Fugue", "Nocturne", "Valse", "Impromptu", "Pièce solo", "Musique de chambre", "Autre"]; // Expanded list
 
         // --- Utility Functions ---
         function showMessage(text, duration = 3000) {
@@ -237,65 +296,75 @@
             if (!messageBox || !messageText) return;
 
             messageText.textContent = text;
-            messageBox.classList.remove('hidden', 'opacity-0');
-            messageBox.classList.add('opacity-100');
+            messageBox.classList.remove('hidden');
+            // Force reflow before adding opacity class for transition
+            void messageBox.offsetWidth;
+            messageBox.style.opacity = 1;
 
+
+            // Auto-hide
             setTimeout(() => {
-                messageBox.classList.remove('opacity-100');
-                messageBox.classList.add('opacity-0');
-                setTimeout(() => messageBox.classList.add('hidden'), 300);
+                 messageBox.style.opacity = 0;
+                 // Hide completely after transition
+                 setTimeout(() => messageBox.classList.add('hidden'), 300); // Match transition duration
             }, duration);
         }
 
         function getStoredData(key) {
-            return JSON.parse(localStorage.getItem(key) || '[]');
+            try {
+                return JSON.parse(localStorage.getItem(key) || '[]');
+            } catch (e) {
+                console.error(`Error parsing localStorage key "${key}":`, e);
+                return []; // Return empty array on error
+            }
         }
 
         function saveStoredData(key, data) {
-            localStorage.setItem(key, JSON.stringify(data));
+            try {
+                localStorage.setItem(key, JSON.stringify(data));
+            } catch (e) {
+                 console.error(`Error saving to localStorage key "${key}":`, e);
+                 showMessage("Erreur lors de la sauvegarde des données. L'espace de stockage est peut-être plein.", 5000);
+            }
         }
 
         function formatDate(dateString) {
              if (!dateString) return 'Date inconnue';
-             // Ensure dateString is treated as local time, not UTC
              const [year, month, day] = dateString.split('-');
-             const date = new Date(year, month - 1, day); // Month is 0-indexed
-             return date.toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' });
+             if (!year || !month || !day) return 'Date invalide'; // Basic validation
+             try {
+                const date = new Date(year, month - 1, day);
+                return date.toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' });
+             } catch (e) {
+                 return 'Date invalide';
+             }
         }
-
 
         // --- Navigation ---
         const navButtons = document.querySelectorAll('.nav-btn');
         const sections = document.querySelectorAll('main section');
 
         function setActiveSection(targetId) {
-             // Hide all sections
             sections.forEach(section => section.classList.add('hidden'));
-            // Show target section
             const targetSection = document.getElementById(targetId);
             if (targetSection) {
                 targetSection.classList.remove('hidden');
             }
-             // Update button styles
             navButtons.forEach(btn => {
-                if (btn.dataset.target === targetId) {
-                    btn.setAttribute('aria-current', 'page');
-                } else {
-                    btn.removeAttribute('aria-current');
-                }
+                btn.setAttribute('aria-current', btn.dataset.target === targetId ? 'page' : 'false');
             });
 
-             // Load data specific to the section if needed
-             if (targetId === 'journal') {
-                 populateJournalPieceDropdown();
-                 loadJournalEntries(); // Reload entries to ensure piece names are fresh
-             }
-             if (targetId === 'bibliotheque') {
-                 loadPieces();
-             }
-             if (targetId === 'progres') {
-                 updateProgressStats();
-             }
+            // Load data specific to the newly activated section
+            if (targetId === 'planification') {
+                loadSavedPlans();
+            } else if (targetId === 'journal') {
+                populateJournalPieceDropdown();
+                loadJournalEntries();
+            } else if (targetId === 'bibliotheque') {
+                loadPieces();
+            }
+             // Scroll to top of the main content area when switching sections
+             document.querySelector('main').scrollTop = 0;
         }
 
         navButtons.forEach(button => {
@@ -305,41 +374,131 @@
         });
 
         // --- Planification Section ---
+        const sessionDateInput = document.getElementById('session-date');
+        const sessionGoalInput = document.getElementById('session-goal');
         const addExerciceBtn = document.getElementById('add-exercice-btn');
-        const exercicesList = document.getElementById('exercices-list');
-        const savePlanBtn = document.getElementById('save-plan-btn'); // Placeholder button
+        const exercicesListDiv = document.getElementById('exercices-list');
+        const savePlanBtn = document.getElementById('save-plan-btn');
+        const savedPlansListDiv = document.getElementById('saved-plans-list');
+
+        function createExerciceElement() {
+             const exerciceDiv = document.createElement('div');
+            exerciceDiv.className = 'exercice-item flex items-center space-x-2 p-2 bg-white rounded-md border border-brand-gray-border';
+            // Note: Using unique IDs might be complex here if plans are editable later.
+            // Using classes for retrieval is simpler for now.
+            exerciceDiv.innerHTML = `
+                <input type="text" placeholder="Exercice (gamme, étude, mesure...)" class="exercice-text flex-grow border-none focus:ring-0 bg-transparent p-1">
+                <input type="number" placeholder="Durée" min="1" class="exercice-duration w-20 border-gray-300 rounded-md focus:ring-brand-black focus:border-brand-black p-1 text-sm">
+                <span class="text-sm text-gray-500">min</span>
+                <button type="button" class="remove-exercice-btn btn btn-danger-outline !p-1 !text-xs" title="Supprimer cet exercice">
+                    Supprimer
+                </button>
+            `;
+             // Add event listener to the new remove button
+            exerciceDiv.querySelector('.remove-exercice-btn').addEventListener('click', (e) => {
+                 e.currentTarget.closest('.exercice-item').remove();
+            });
+            return exerciceDiv;
+        }
 
         addExerciceBtn.addEventListener('click', () => {
-            const exerciceDiv = document.createElement('div');
-            exerciceDiv.className = 'flex items-center space-x-2';
-            exerciceDiv.innerHTML = `
-                <input type="text" placeholder="Exercice (gamme, étude, morceau...)" class="flex-grow p-2 border border-brand-gray-border rounded-md bg-brand-white focus:outline-none focus:ring-1 focus:ring-brand-black">
-                <input type="number" placeholder="Durée (min)" min="1" class="w-24 p-2 border border-brand-gray-border rounded-md bg-brand-white focus:outline-none focus:ring-1 focus:ring-brand-black">
-                <button class="remove-exercice-btn p-2 text-red-600 hover:text-red-800" title="Supprimer">
-                    <span class="lucide">&#xe03f;</span> </button>
-            `;
-            exercicesList.appendChild(exerciceDiv);
-            // Add event listener to the new remove button
-            exerciceDiv.querySelector('.remove-exercice-btn').addEventListener('click', (e) => {
-                 e.currentTarget.closest('.flex').remove();
+            exercicesListDiv.appendChild(createExerciceElement());
+        });
+
+        function savePlan() {
+            const date = sessionDateInput.value;
+            const goal = sessionGoalInput.value.trim();
+            const exercises = [];
+            exercicesListDiv.querySelectorAll('.exercice-item').forEach(item => {
+                const textInput = item.querySelector('.exercice-text');
+                const durationInput = item.querySelector('.exercice-duration');
+                const text = textInput ? textInput.value.trim() : '';
+                const duration = durationInput ? parseInt(durationInput.value, 10) : null;
+                if (text) { // Only add exercises with text
+                    exercises.push({ text, duration: duration > 0 ? duration : null });
+                }
             });
-        });
 
-        // Add event listener to initially present remove buttons
-        exercicesList.querySelectorAll('.remove-exercice-btn').forEach(button => {
-             button.addEventListener('click', (e) => {
-                 e.currentTarget.closest('.flex').remove();
-             });
-        });
+            if (!date) {
+                showMessage("Veuillez sélectionner une date pour le plan.", 3000);
+                return;
+            }
+             if (!goal && exercises.length === 0) {
+                showMessage("Veuillez ajouter un objectif ou au moins un exercice.", 3000);
+                return;
+            }
 
-        savePlanBtn.addEventListener('click', () => {
-            showMessage("La sauvegarde des plans sera bientôt disponible !", 3000);
-        });
+            const plans = getStoredData(PLANS_STORAGE_KEY);
+            const newPlan = {
+                id: Date.now(), // Unique ID
+                date: date,
+                goal: goal,
+                exercises: exercises
+            };
+            plans.push(newPlan);
+            saveStoredData(PLANS_STORAGE_KEY, plans);
 
+            // Clear form (optional, maybe keep date?)
+            sessionGoalInput.value = '';
+            exercicesListDiv.innerHTML = ''; // Remove all exercise fields
+            exercicesListDiv.appendChild(createExerciceElement()); // Add one empty exercise back
+
+            showMessage("Plan de session enregistré !", 2000);
+            loadSavedPlans(); // Refresh the list of saved plans
+        }
+
+        function loadSavedPlans() {
+            const plans = getStoredData(PLANS_STORAGE_KEY);
+            savedPlansListDiv.innerHTML = ''; // Clear list
+
+            if (plans.length === 0) {
+                savedPlansListDiv.innerHTML = '<p class="text-sm text-gray-500 italic">Aucun plan sauvegardé pour le moment.</p>';
+                return;
+            }
+
+            // Sort plans by date, newest first
+            plans.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            plans.forEach(plan => {
+                const planDiv = document.createElement('div');
+                planDiv.className = 'p-3 bg-white rounded-md border border-brand-gray-border flex justify-between items-start';
+                planDiv.innerHTML = `
+                    <div class="flex-grow mr-3">
+                        <p class="font-medium text-sm">${formatDate(plan.date)}</p>
+                        ${plan.goal ? `<p class="text-xs text-gray-600 mt-1">Objectif: ${plan.goal}</p>` : ''}
+                        ${plan.exercises.length > 0 ? `<p class="text-xs text-gray-600 mt-1">${plan.exercises.length} exercice(s)</p>` : ''}
+                    </div>
+                    <button type="button" data-id="${plan.id}" class="remove-plan-btn btn btn-danger-outline !p-1 !text-xs flex-shrink-0" title="Supprimer ce plan">
+                        Supprimer
+                    </button>
+                `;
+                // Add view/load functionality later if needed
+                savedPlansListDiv.appendChild(planDiv);
+            });
+
+            // Add event listeners for delete buttons
+            savedPlansListDiv.querySelectorAll('.remove-plan-btn').forEach(button => {
+                button.addEventListener('click', removePlan);
+            });
+        }
+
+        function removePlan(event) {
+            const planIdToRemove = parseInt(event.currentTarget.dataset.id, 10);
+            let plans = getStoredData(PLANS_STORAGE_KEY);
+            plans = plans.filter(plan => plan.id !== planIdToRemove);
+            saveStoredData(PLANS_STORAGE_KEY, plans);
+            loadSavedPlans(); // Reload the list
+            showMessage("Plan supprimé.", 2000);
+        }
+
+        savePlanBtn.addEventListener('click', savePlan);
+        // Add initial empty exercise on load
+        exercicesListDiv.appendChild(createExerciceElement());
 
         // --- Bibliothèque Section (Répertoire) ---
         const addPieceBtn = document.getElementById('add-piece-btn');
-        const pieceNameInput = document.getElementById('piece-name');
+        const pieceTitleInput = document.getElementById('piece-title');
+        const pieceComposerInput = document.getElementById('piece-composer'); // New input
         const pieceCategorySelect = document.getElementById('piece-category');
         const piecesListDiv = document.getElementById('pieces-list');
 
@@ -362,41 +521,49 @@
                 return;
             }
 
-             // Optional: Group by category for display
+             // Group by category for display
              const groupedPieces = pieces.reduce((acc, piece) => {
-                 (acc[piece.category] = acc[piece.category] || []).push(piece);
+                 const category = piece.category || "Autre"; // Default category if missing
+                 (acc[category] = acc[category] || []).push(piece);
                  return acc;
              }, {});
 
-             // Sort categories alphabetically, except "Autre" at the end
+             // Sort categories alphabetically, "Autre" at the end
              const sortedCategories = Object.keys(groupedPieces).sort((a, b) => {
                  if (a === "Autre") return 1;
                  if (b === "Autre") return -1;
                  return a.localeCompare(b);
              });
 
-
              sortedCategories.forEach(category => {
                  const categoryDiv = document.createElement('div');
-                 categoryDiv.className = 'mb-3';
+                 categoryDiv.className = 'mb-4'; // Spacing between categories
                  const categoryTitle = document.createElement('h4');
-                 categoryTitle.className = 'font-medium text-sm uppercase tracking-wider text-gray-600 mb-1';
+                 categoryTitle.className = 'font-medium text-sm uppercase tracking-wider text-gray-500 mb-2 border-b border-brand-gray-border pb-1';
                  categoryTitle.textContent = category;
                  categoryDiv.appendChild(categoryTitle);
 
-                 groupedPieces[category].sort((a,b) => a.name.localeCompare(b.name)).forEach(piece => {
+                 // Sort pieces within category by composer then title
+                 groupedPieces[category].sort((a, b) => {
+                     const composerCompare = (a.composer || '').localeCompare(b.composer || '');
+                     if (composerCompare !== 0) return composerCompare;
+                     return (a.title || '').localeCompare(b.title || '');
+                 }).forEach(piece => {
                      const pieceDiv = document.createElement('div');
-                     pieceDiv.className = 'border-b border-brand-gray-border pb-2 flex justify-between items-center';
+                     pieceDiv.className = 'p-3 bg-white rounded-md border border-brand-gray-border flex justify-between items-start';
                      pieceDiv.innerHTML = `
-                         <span class="text-sm">${piece.name}</span>
-                         <button data-id="${piece.id}" class="remove-piece-btn p-1 text-red-600 hover:text-red-800" title="Supprimer">
-                             <span class="lucide text-sm">&#xe03f;</span> </button>
+                         <div class="flex-grow mr-3">
+                             <p class="font-medium text-sm">${piece.title || 'Titre inconnu'}</p>
+                             <p class="text-xs text-gray-600 mt-1">${piece.composer || 'Compositeur inconnu'}</p>
+                         </div>
+                         <button type="button" data-id="${piece.id}" class="remove-piece-btn btn btn-danger-outline !p-1 !text-xs flex-shrink-0" title="Supprimer cette pièce">
+                             Supprimer
+                         </button>
                      `;
                      categoryDiv.appendChild(pieceDiv);
                  });
                  piecesListDiv.appendChild(categoryDiv);
              });
-
 
             // Add event listeners to remove buttons
             piecesListDiv.querySelectorAll('.remove-piece-btn').forEach(button => {
@@ -405,30 +572,33 @@
         }
 
         function addPiece() {
-            const name = pieceNameInput.value.trim();
+            const title = pieceTitleInput.value.trim();
+            const composer = pieceComposerInput.value.trim(); // Get composer
             const category = pieceCategorySelect.value;
 
-            if (!name) {
-                showMessage("Veuillez entrer un nom pour la pièce.", 3000);
+            if (!title) {
+                showMessage("Veuillez entrer un titre pour la pièce.", 3000);
                 return;
             }
+             // Composer is optional, but good practice to have
 
             const pieces = getStoredData(PIECES_STORAGE_KEY);
             const newPiece = {
-                id: Date.now(), // Simple unique ID using timestamp
-                name: name,
+                id: Date.now(), // Simple unique ID
+                title: title,
+                composer: composer, // Save composer
                 category: category
             };
             pieces.push(newPiece);
             saveStoredData(PIECES_STORAGE_KEY, pieces);
 
-            // Clear form and reload list
-            pieceNameInput.value = '';
-            // pieceCategorySelect.value = PIECE_CATEGORIES[0]; // Reset dropdown if needed
+            // Clear form
+            pieceTitleInput.value = '';
+            pieceComposerInput.value = '';
+            // pieceCategorySelect.value = PIECE_CATEGORIES[0]; // Optionally reset dropdown
             loadPieces();
             showMessage("Pièce ajoutée au répertoire !", 2000);
-             // Update journal dropdown in case user navigates there next
-             populateJournalPieceDropdown();
+            populateJournalPieceDropdown(); // Update journal dropdown
         }
 
         function removePiece(event) {
@@ -436,14 +606,12 @@
             let pieces = getStoredData(PIECES_STORAGE_KEY);
             pieces = pieces.filter(piece => piece.id !== pieceIdToRemove);
             saveStoredData(PIECES_STORAGE_KEY, pieces);
-            loadPieces(); // Reload the list
+            loadPieces();
             showMessage("Pièce supprimée.", 2000);
-             // Update journal dropdown as the piece is no longer available
-             populateJournalPieceDropdown();
+            populateJournalPieceDropdown(); // Update journal dropdown
         }
 
         addPieceBtn.addEventListener('click', addPiece);
-
 
         // --- Journal Section ---
         const saveJournalBtn = document.getElementById('save-journal-btn');
@@ -454,50 +622,54 @@
 
         function populateJournalPieceDropdown() {
             const pieces = getStoredData(PIECES_STORAGE_KEY);
-            const currentValue = journalPieceSelect.value; // Preserve selection if possible
-            journalPieceSelect.innerHTML = '<option value="">-- Sélectionner une pièce (Optionnel) --</option>'; // Clear existing options
+            const currentValue = journalPieceSelect.value;
+            journalPieceSelect.innerHTML = '<option value="">-- Sélectionner une pièce du répertoire --</option>'; // Default option
 
-             pieces.sort((a,b) => a.name.localeCompare(b.name)).forEach(piece => {
+             pieces.sort((a,b) => (a.title || '').localeCompare(b.title || '')).forEach(piece => {
                 const option = document.createElement('option');
-                option.value = piece.id; // Store piece ID as value
-                option.textContent = piece.name;
+                option.value = piece.id;
+                option.textContent = `${piece.title}${piece.composer ? ` (${piece.composer})` : ''}`; // Show title (and composer)
                 journalPieceSelect.appendChild(option);
             });
              // Restore previous selection if the piece still exists
-             if (pieces.some(p => p.id == currentValue)) {
-                journalPieceSelect.value = currentValue;
+             if (pieces.some(p => String(p.id) === currentValue)) {
+                 journalPieceSelect.value = currentValue;
+             } else {
+                 journalPieceSelect.value = ""; // Reset if previously selected piece is gone
              }
         }
 
         function loadJournalEntries() {
             const entries = getStoredData(JOURNAL_STORAGE_KEY);
-            const pieces = getStoredData(PIECES_STORAGE_KEY); // Get pieces for name lookup
-            journalEntriesDiv.innerHTML = ''; // Clear existing entries
+            const pieces = getStoredData(PIECES_STORAGE_KEY);
+            journalEntriesDiv.innerHTML = '';
 
             if (entries.length === 0) {
                 journalEntriesDiv.innerHTML = '<p class="text-sm text-gray-500 italic">Aucune entrée pour le moment.</p>';
                 return;
             }
 
-            // Sort entries by date, newest first
             entries.sort((a, b) => new Date(b.date) - new Date(a.date));
 
             entries.forEach(entry => {
                 const entryDiv = document.createElement('div');
-                entryDiv.className = 'border-b border-brand-gray-border pb-3';
-                 // Find the piece name using the stored pieceId
-                 const piece = pieces.find(p => p.id === entry.pieceId);
-                 const pieceName = piece ? piece.name : 'Pièce non spécifiée'; // Handle case where piece was deleted or not set
+                entryDiv.className = 'p-4 bg-white rounded-md border border-brand-gray-border relative'; // Added relative for button positioning
+                 const piece = entry.pieceId ? pieces.find(p => p.id === entry.pieceId) : null;
 
                 entryDiv.innerHTML = `
-                    <div class="flex justify-between items-center mb-1">
-                        <p class="font-medium">${formatDate(entry.date)}</p>
-                        ${piece ? `<span class="text-xs bg-brand-black text-brand-white px-1.5 py-0.5 rounded">${piece.category}</span>` : ''}
+                    <div class="flex justify-between items-center mb-2">
+                        <p class="font-medium text-sm">${formatDate(entry.date)}</p>
+                        ${piece ? `<span class="text-xs bg-gray-200 text-gray-700 px-2 py-0.5 rounded-full">${piece.category || 'Autre'}</span>` : ''}
                     </div>
-                    ${entry.pieceId ? `<p class="text-sm font-semibold mb-1">${pieceName}</p>` : ''}
-                    <p class="text-sm whitespace-pre-wrap">${entry.content}</p>
-                     <button data-id="${entry.id}" class="remove-journal-btn mt-2 p-1 text-red-600 hover:text-red-800 text-xs flex items-center" title="Supprimer l'entrée">
-                         <span class="lucide text-xs mr-1">&#xe03f;</span> Supprimer
+                    ${piece ? `
+                        <div class="mb-2">
+                            <p class="text-sm font-semibold">${piece.title || 'Titre inconnu'}</p>
+                            <p class="text-xs text-gray-600">${piece.composer || 'Compositeur inconnu'}</p>
+                        </div>
+                    ` : ''}
+                    <p class="text-sm whitespace-pre-wrap text-gray-800">${entry.content || 'Aucune note.'}</p>
+                     <button type="button" data-id="${entry.id}" class="remove-journal-btn btn btn-danger-outline !p-1 !text-xs absolute top-2 right-2" title="Supprimer l'entrée">
+                         Supprimer
                      </button>
                 `;
                 journalEntriesDiv.appendChild(entryDiv);
@@ -512,30 +684,33 @@
         function saveJournalEntry() {
             const date = journalDateInput.value;
             const content = journalContentInput.value.trim();
-            const pieceId = journalPieceSelect.value ? parseInt(journalPieceSelect.value, 10) : null; // Get selected piece ID, or null
+            const pieceId = journalPieceSelect.value ? parseInt(journalPieceSelect.value, 10) : null;
 
-            if (!date || !content) {
-                showMessage("Veuillez remplir la date et les notes de pratique.", 3000);
-                return;
+            if (!date) {
+                 showMessage("Veuillez sélectionner une date pour l'entrée.", 3000);
+                 return;
             }
+             if (!content) {
+                 showMessage("Veuillez ajouter des notes de pratique.", 3000);
+                 return;
+            }
+
 
             const entries = getStoredData(JOURNAL_STORAGE_KEY);
             const newEntry = {
-                id: Date.now(), // Unique ID for the entry
+                id: Date.now(),
                 date: date,
                 content: content,
-                pieceId: pieceId // Store the selected piece ID
+                pieceId: pieceId
             };
             entries.push(newEntry);
             saveStoredData(JOURNAL_STORAGE_KEY, entries);
 
-            // Clear form and reload entries
-            // journalDateInput.value = ''; // Keep date potentially
+            // Clear form
             journalContentInput.value = '';
             journalPieceSelect.value = ''; // Reset dropdown
             loadJournalEntries();
             showMessage("Entrée enregistrée !", 2000);
-             updateProgressStats(); // Update stats after adding entry
         }
 
          function removeJournalEntry(event) {
@@ -543,30 +718,19 @@
             let entries = getStoredData(JOURNAL_STORAGE_KEY);
             entries = entries.filter(entry => entry.id !== entryIdToRemove);
             saveStoredData(JOURNAL_STORAGE_KEY, entries);
-            loadJournalEntries(); // Reload the list
+            loadJournalEntries();
             showMessage("Entrée supprimée.", 2000);
-             updateProgressStats(); // Update stats after removing entry
         }
 
         saveJournalBtn.addEventListener('click', saveJournalEntry);
 
-        // --- Progrès Section ---
-        const journalEntryCountSpan = document.getElementById('journal-entry-count');
-
-        function updateProgressStats() {
-             const entries = getStoredData(JOURNAL_STORAGE_KEY);
-             if (journalEntryCountSpan) {
-                journalEntryCountSpan.textContent = entries.length;
-             }
-             // Add more complex calculations or chart updates here later
-        }
 
         // --- Initial Load ---
         document.addEventListener('DOMContentLoaded', () => {
             // Set today's date in date inputs
             const today = new Date().toISOString().split('T')[0];
-            document.getElementById('session-date').value = today;
-            document.getElementById('journal-date').value = today;
+            sessionDateInput.value = today;
+            journalDateInput.value = today;
 
              // Populate static dropdowns
              populateCategoryDropdown();
@@ -574,22 +738,21 @@
              // Set default active section
              setActiveSection('planification'); // Start on Planification tab
 
-             // Load data relevant to the initial section
-             // (loadPieces and loadJournalEntries will be called when switching sections)
-             updateProgressStats(); // Calculate initial stats
+             // Load initial data for the default section
+             loadSavedPlans();
 
 
             // Register Service Worker
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.register('sw.js')
                     .then(registration => {
-                        console.log('Service Worker registered avec succès:', registration);
+                        console.log('Service Worker: Registered scope:', registration.scope);
                     })
                     .catch(error => {
-                        console.log('Échec de l\'enregistrement du Service Worker:', error);
+                        console.error('Service Worker: Registration failed:', error);
                     });
             } else {
-                 console.log('Service workers ne sont pas supportés par ce navigateur.');
+                 console.log('Service workers are not supported.');
             }
         });
 
