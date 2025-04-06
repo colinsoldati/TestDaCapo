@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DaCapo - Suivi de Pratique Musicale</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+    <style>
+      @font-face {
+        font-family: 'LucideIcons';
+        src: url(https://cdn.jsdelivr.net/npm/lucide-static@latest/font/Lucide.ttf) format('truetype');
+      }
+      .lucide {
+        font-family: 'LucideIcons';
+        font-size: 1.25rem; /* Adjust size as needed */
+        line-height: 1;
+        font-style: normal;
+        font-weight: normal;
+        font-variant: normal;
+        text-transform: none;
+        speak: none;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      /* Tailwind configuration */
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['DM Sans', 'sans-serif'],
+              montserrat: ['Montserrat', 'sans-serif'],
+            },
+            colors: {
+              'brand-black': '#000000',
+              'brand-white': '#FFFFFF',
+            }
+          }
+        }
+      }
+    </style>
+
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#FFFFFF">
+    <link rel="icon" href="https://placehold.co/32x32/000000/FFFFFF?text=DC" type="image/png">
+
+
+</head>
+<body class="bg-brand-white text-brand-black font-sans flex flex-col min-h-screen">
+
+    <header class="bg-brand-white border-b border-brand-black p-4 sticky top-0 z-10">
+        <h1 class="text-2xl font-montserrat font-bold text-center">DaCapo</h1>
+    </header>
+
+    <main class="flex-grow container mx-auto p-4">
+
+        <section id="planification" class="space-y-4">
+            <h2 class="text-xl font-montserrat font-semibold mb-3 border-b border-brand-black pb-1">Planification de Session</h2>
+
+            <div class="bg-brand-white border border-brand-black rounded-lg p-4 space-y-3">
+                <h3 class="font-montserrat font-medium">Nouvelle Session</h3>
+                <div>
+                    <label for="session-date" class="block text-sm font-medium mb-1">Date :</label>
+                    <input type="date" id="session-date" name="session-date" class="w-full p-2 border border-brand-black rounded-md bg-brand-white focus:outline-none focus:ring-1 focus:ring-brand-black">
+                </div>
+                 <div>
+                    <label for="session-goal" class="block text-sm font-medium mb-1">Objectif Principal :</label>
+                    <input type="text" id="session-goal" name="session-goal" placeholder="Ex: Travailler la vélocité sur l'étude X" class="w-full p-2 border border-brand-black rounded-md bg-brand-white focus:outline-none focus:ring-1 focus:ring-brand-black">
+                </div>
+                <div id="exercices-list" class="space-y-2">
+                    <div class="flex items-center space-x-2">
+                         <input type="text" placeholder="Exercice (gamme, étude, morceau...)" class="flex-grow p-2 border border-brand-black rounded-md bg-brand-white focus:outline-none focus:ring-1 focus:ring-brand-black">
+                         <input type="number" placeholder="Durée (min)" min="1" class="w-24 p-2 border border-brand-black rounded-md bg-brand-white focus:outline-none focus:ring-1 focus:ring-brand-black">
+                         <button class="p-2 text-red-600 hover:text-red-800" title="Supprimer">
+                             <span class="lucide">&#xe03f;</span> </button>
+                    </div>
+                </div>
+                <button id="add-exercice-btn" class="w-full flex items-center justify-center p-2 border border-brand-black rounded-md hover:bg-gray-100 transition-colors duration-150">
+                    <span class="lucide mr-2">&#xe03b;</span> Ajouter un exercice
+                </button>
+            </div>
+
+            <div class="bg-brand-white border border-brand-black rounded-lg p-4 text-center space-y-3">
+                <h3 class="font-montserrat font-medium">Minuteur</h3>
+                <div id="timer-display" class="text-4xl font-montserrat font-bold">00:00</div>
+                <div class="flex justify-center space-x-2">
+                     <input type="number" id="timer-duration" placeholder="Durée (min)" min="1" class="w-24 p-2 border border-brand-black rounded-md bg-brand-white focus:outline-none focus:ring-1 focus:ring-brand-black">
+                    <button id="start-timer-btn" class="p-2 border border-brand-black rounded-md hover:bg-gray-100 transition-colors duration-150" title="Démarrer">
+                        <span class="lucide">&#xe039;</span> </button>
+                    <button id="pause-timer-btn" class="p-2 border border-brand-black rounded-md hover:bg-gray-100 transition-colors duration-150 hidden" title="Pause">
+                         <span class="lucide">&#xe036;</span> </button>
+                    <button id="reset-timer-btn" class="p-2 border border-brand-black rounded-md hover:bg-gray-100 transition-colors duration-150" title="Réinitialiser">
+                         <span class="lucide">&#xe04e;</span> </button>
+                </div>
+                 <div id="timer-message" class="text-sm text-red-600 h-4"></div> </div>
+
+             <div class="bg-brand-white border border-brand-black rounded-lg p-4">
+                <h3 class="font-montserrat font-medium mb-2">Plans Sauvegardés</h3>
+                <p class="text-sm text-gray-500 italic">Fonctionnalité à venir...</p>
+                </div>
+        </section>
+
+        <section id="journal" class="hidden space-y-4">
+            <h2 class="text-xl font-montserrat font-semibold mb-3 border-b border-brand-black pb-1">Journal de Bord</h2>
+
+            <div class="bg-brand-white border border-brand-black rounded-lg p-4 space-y-3">
+                 <h3 class="font-montserrat font-medium">Nouvelle Entrée</h3>
+                 <div>
+                     <label for="journal-date" class="block text-sm font-medium mb-1">Date :</label>
+                     <input type="date" id="journal-date" name="journal-date" class="w-full p-2 border border-brand-black rounded-md bg-brand-white focus:outline-none focus:ring-1 focus:ring-brand-black">
+                 </div>
+                 <div>
+                     <label for="journal-content" class="block text-sm font-medium mb-1">Notes de pratique :</label>
+                     <textarea id="journal-content" name="journal-content" rows="5" placeholder="Morceaux travaillés, difficultés, solutions, sensations..." class="w-full p-2 border border-brand-black rounded-md bg-brand-white focus:outline-none focus:ring-1 focus:ring-brand-black"></textarea>
+                 </div>
+                 <button id="save-journal-btn" class="w-full flex items-center justify-center p-2 border border-brand-black rounded-md hover:bg-gray-100 transition-colors duration-150">
+                     <span class="lucide mr-2">&#xe01a;</span> Enregistrer l'entrée
+                 </button>
+             </div>
+
+             <div class="bg-brand-white border border-brand-black rounded-lg p-4">
+                <h3 class="font-montserrat font-medium mb-2">Entrées Précédentes</h3>
+                <div id="journal-entries" class="space-y-3">
+                    <p class="text-sm text-gray-500 italic">Aucune entrée pour le moment.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="progres" class="hidden space-y-4">
+            <h2 class="text-xl font-montserrat font-semibold mb-3 border-b border-brand-black pb-1">Analyse des Progrès</h2>
+             <div class="bg-brand-white border border-brand-black rounded-lg p-4">
+                <h3 class="font-montserrat font-medium mb-2">Statistiques (Exemple)</h3>
+                <p>Temps total de pratique (via journal) : <span id="total-practice-time">0</span> heures</p>
+                <p class="text-sm text-gray-500 italic mt-4">Des graphiques et analyses plus détaillés seront ajoutés ici.</p>
+                <div id="charts-container" class="mt-4">
+                     </div>
+            </div>
+        </section>
+
+        <section id="bibliotheque" class="hidden space-y-4">
+            <h2 class="text-xl font-montserrat font-semibold mb-3 border-b border-brand-black pb-1">Bibliothèque d'Exercices</h2>
+
+            <div class="bg-brand-white border border-brand-black rounded-lg p-4 space-y-3">
+                 <h3 class="font-montserrat font-medium">Ajouter un Exercice Personnel</h3>
+                 <div>
+                     <label for="lib-exercice-name" class="block text-sm font-medium mb-1">Nom de l'exercice :</label>
+                     <input type="text" id="lib-exercice-name" name="lib-exercice-name" placeholder="Ex: Gamme de Do Majeur sur 2 octaves" class="w-full p-2 border border-brand-black rounded-md bg-brand-white focus:outline-none focus:ring-1 focus:ring-brand-black">
+                 </div>
+                 <div>
+                     <label for="lib-exercice-desc" class="block text-sm font-medium mb-1">Description/Conseils :</label>
+                     <textarea id="lib-exercice-desc" name="lib-exercice-desc" rows="3" placeholder="Détails, doigtés, points d'attention..." class="w-full p-2 border border-brand-black rounded-md bg-brand-white focus:outline-none focus:ring-1 focus:ring-brand-black"></textarea>
+                 </div>
+                 <button id="save-lib-exercice-btn" class="w-full flex items-center justify-center p-2 border border-brand-black rounded-md hover:bg-gray-100 transition-colors duration-150">
+                     <span class="lucide mr-2">&#xe01a;</span> Enregistrer l'exercice
+                 </button>
+            </div>
+
+            <div class="bg-brand-white border border-brand-black rounded-lg p-4">
+                <h3 class="font-montserrat font-medium mb-2">Mes Exercices</h3>
+                <div id="library-list" class="space-y-3">
+                    <p class="text-sm text-gray-500 italic">Aucun exercice personnel ajouté.</p>
+                </div>
+            </div>
+             <div class="bg-brand-white border border-brand-black rounded-lg p-4">
+                <h3 class="font-montserrat font-medium mb-2">Ressources Intégrées (Exemple)</h3>
+                <ul class="list-disc list-inside space-y-1">
+                    <li>Gammes Majeures</li>
+                    <li>Arpèges Basiques</li>
+                    <li>Exercices de Hanon (Lien externe ou description)</li>
+                </ul>
+                 <p class="text-sm text-gray-500 italic mt-4">Plus de ressources seront ajoutées.</p>
+            </div>
+        </section>
+
+         <div id="message-box" class="fixed bottom-4 right-4 bg-brand-black text-brand-white p-3 rounded-lg shadow-md hidden transition-opacity duration-300 z-50">
+            <span id="message-text"></span>
+            <button onclick="document.getElementById('message-box').classList.add('hidden')" class="ml-4 font-bold">X</button>
+        </div>
+
+    </main>
+
+    <nav class="bg-brand-white border-t border-brand-black p-2 sticky bottom-0 z-10">
+        <ul class="flex justify-around">
+            <li>
+                <button data-target="planification" class="nav-btn flex flex-col items-center text-brand-black p-2 rounded-md" aria-current="page">
+                    <span class="lucide">&#xe4bc;</span> <span class="text-xs font-medium">Plan</span>
+                </button>
+            </li>
+            <li>
+                <button data-target="journal" class="nav-btn flex flex-col items-center text-gray-500 hover:text-brand-black p-2 rounded-md">
+                    <span class="lucide">&#xe9d3;</span> <span class="text-xs font-medium">Journal</span>
+                </button>
+            </li>
+            <li>
+                <button data-target="progres" class="nav-btn flex flex-col items-center text-gray-500 hover:text-brand-black p-2 rounded-md">
+                    <span class="lucide">&#xe151;</span> <span class="text-xs font-medium">Progrès</span>
+                </button>
+            </li>
+            <li>
+                <button data-target="bibliotheque" class="nav-btn flex flex-col items-center text-gray-500 hover:text-brand-black p-2 rounded-md">
+                   <span class="lucide">&#xe938;</span> <span class="text-xs font-medium">Biblio</span>
+                </button>
+            </li>
+        </ul>
+    </nav>
+
+    <script>
+        // --- Utility Functions ---
+        // Function to show a custom message (replacement for alert)
+        function showMessage(text, duration = 3000) {
+            const messageBox = document.getElementById('message-box');
+            const messageText = document.getElementById('message-text');
+            if (!messageBox || !messageText) return; // Safety check
+
+            messageText.textContent = text;
+            messageBox.classList.remove('hidden', 'opacity-0');
+            messageBox.classList.add('opacity-100');
+
+            // Automatically hide after duration
+            setTimeout(() => {
+                messageBox.classList.remove('opacity-100');
+                messageBox.classList.add('opacity-0');
+                // Use transitionend event for smoother hiding if needed,
+                // but setTimeout is simpler for now.
+                setTimeout(() => messageBox.classList.add('hidden'), 300); // Match duration in CSS
+            }, duration);
+        }
+
+        // --- Navigation ---
+        const navButtons = document.querySelectorAll('.nav-btn');
+        const sections = document.querySelectorAll('main section');
+        const planificationSection = document.getElementById('planification'); // Default section
+
+        // Set initial active state for Planification
+        navButtons.forEach(btn => {
+            if (btn.dataset.target === 'planification') {
+                btn.classList.remove('text-gray-500', 'hover:text-brand-black');
+                btn.classList.add('text-brand-black');
+                btn.setAttribute('aria-current', 'page');
+            } else {
+                btn.classList.add('text-gray-500', 'hover:text-brand-black');
+                btn.removeAttribute('aria-current');
+            }
+        });
+
+
+        navButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const targetId = button.dataset.target;
+
+                // Hide all sections
+                sections.forEach(section => {
+                    section.classList.add('hidden');
+                });
+
+                // Show target section
+                const targetSection = document.getElementById(targetId);
+                if (targetSection) {
+                    targetSection.classList.remove('hidden');
+                }
+
+                // Update button styles
+                navButtons.forEach(btn => {
+                    btn.classList.remove('text-brand-black');
+                    btn.classList.add('text-gray-500', 'hover:text-brand-black');
+                    btn.removeAttribute('aria-current');
+                });
+                button.classList.remove('text-gray-500', 'hover:text-brand-black');
+                button.classList.add('text-brand-black');
+                button.setAttribute('aria-current', 'page');
+            });
+        });
+
+        // --- Planification Section ---
+        const addExerciceBtn = document.getElementById('add-exercice-btn');
+        const exercicesList = document.getElementById('exercices-list');
+
+        addExerciceBtn.addEventListener('click', () => {
+            const exerciceDiv = document.createElement('div');
+            exerciceDiv.className = 'flex items-center space-x-2';
+            exerciceDiv.innerHTML = `
+                <input type="text" placeholder="Exercice (gamme, étude, morceau...)" class="flex-grow p-2 border border-brand-black rounded-md bg-brand-white focus:outline-none focus:ring-1 focus:ring-brand-black">
+                <input type="number" placeholder="Durée (min)" min="1" class="w-24 p-2 border border-brand-black rounded-md bg-brand-white focus:outline-none focus:ring-1 focus:ring-brand-black">
+                <button class="remove-exercice-btn p-2 text-red-600 hover:text-red-800" title="Supprimer">
+                    <span class="lucide">&#xe03f;</span> </button>
+            `;
+            exercicesList.appendChild(exerciceDiv);
+
+            // Add event listener to the new remove button
+            exerciceDiv.querySelector('.remove-exercice-btn').addEventListener('click', (e) => {
+                 e.currentTarget.closest('.flex').remove();
+            });
+        });
+
+        // Add event listener to initially present remove buttons (if any)
+        exercicesList.querySelectorAll('.remove-exercice-btn').forEach(button => {
+             button.addEventListener('click', (e) => {
+                 e.currentTarget.closest('.flex').remove();
+             });
+        });
+
+
+        // --- Timer Logic ---
+        const timerDisplay = document.getElementById('timer-display');
+        const startTimerBtn = document.getElementById('start-timer-btn');
+        const pauseTimerBtn = document.getElementById('pause-timer-btn');
+        const resetTimerBtn = document.getElementById('reset-timer-btn');
+        const timerDurationInput = document.getElementById('timer-duration');
+        const timerMessage = document.getElementById('timer-message');
+
+        let timerInterval = null;
+        let totalSeconds = 0;
+        let remainingSeconds = 0;
+        let isPaused = false;
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(remainingSeconds / 60);
+            const seconds = remainingSeconds % 60;
+            timerDisplay.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+
+        function startTimer() {
+            const durationMinutes = parseInt(timerDurationInput.value, 10);
+            if (isNaN(durationMinutes) || durationMinutes <= 0) {
+                 timerMessage.textContent = "Veuillez entrer une durée valide.";
+                 setTimeout(() => timerMessage.textContent = "", 3000);
+                return;
+            }
+             timerMessage.textContent = ""; // Clear previous messages
+
+            if (timerInterval === null) { // Start new timer
+                 totalSeconds = durationMinutes * 60;
+                 remainingSeconds = totalSeconds;
+                 isPaused = false;
+            } else if (isPaused) { // Resume timer
+                 isPaused = false;
+            } else {
+                // Timer already running, do nothing or show message
+                return;
+            }
+
+
+            startTimerBtn.classList.add('hidden');
+            pauseTimerBtn.classList.remove('hidden');
+            timerDurationInput.disabled = true; // Disable input while running
+
+            timerInterval = setInterval(() => {
+                 if (!isPaused && remainingSeconds > 0) {
+                    remainingSeconds--;
+                    updateTimerDisplay();
+                 } else if (remainingSeconds === 0) {
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+                    showMessage("Temps écoulé !");
+                    resetTimer(); // Reset after finishing
+                 }
+            }, 1000);
+             updateTimerDisplay(); // Initial display update
+        }
+
+        function pauseTimer() {
+             isPaused = true;
+             // We don't clear the interval, just stop decrementing
+             pauseTimerBtn.classList.add('hidden');
+             startTimerBtn.classList.remove('hidden');
+             // Keep input disabled during pause
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            isPaused = false;
+            totalSeconds = 0;
+            remainingSeconds = 0;
+            updateTimerDisplay(); // Reset display to 00:00
+            startTimerBtn.classList.remove('hidden');
+            pauseTimerBtn.classList.add('hidden');
+            timerDurationInput.disabled = false; // Re-enable input
+            timerDurationInput.value = ''; // Clear input
+            timerMessage.textContent = ""; // Clear messages
+        }
+
+        startTimerBtn.addEventListener('click', startTimer);
+        pauseTimerBtn.addEventListener('click', pauseTimer);
+        resetTimerBtn.addEventListener('click', resetTimer);
+
+        // --- Journal Section ---
+        const saveJournalBtn = document.getElementById('save-journal-btn');
+        const journalDateInput = document.getElementById('journal-date');
+        const journalContentInput = document.getElementById('journal-content');
+        const journalEntriesDiv = document.getElementById('journal-entries');
+
+        function loadJournalEntries() {
+            const entries = JSON.parse(localStorage.getItem('dacapoJournalEntries') || '[]');
+            journalEntriesDiv.innerHTML = ''; // Clear existing entries
+
+            if (entries.length === 0) {
+                journalEntriesDiv.innerHTML = '<p class="text-sm text-gray-500 italic">Aucune entrée pour le moment.</p>';
+                return;
+            }
+
+            // Sort entries by date, newest first
+            entries.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+
+            entries.forEach(entry => {
+                const entryDiv = document.createElement('div');
+                entryDiv.className = 'border-b border-gray-200 pb-2';
+                // Format date for display
+                 const displayDate = new Date(entry.date).toLocaleDateString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric' });
+                entryDiv.innerHTML = `
+                    <p class="font-medium">${displayDate}</p>
+                    <p class="text-sm whitespace-pre-wrap">${entry.content}</p>
+                `;
+                journalEntriesDiv.appendChild(entryDiv);
+            });
+        }
+
+        saveJournalBtn.addEventListener('click', () => {
+            const date = journalDateInput.value;
+            const content = journalContentInput.value.trim();
+
+            if (!date || !content) {
+                showMessage("Veuillez remplir la date et le contenu de l'entrée.", 3000);
+                return;
+            }
+
+            const entries = JSON.parse(localStorage.getItem('dacapoJournalEntries') || '[]');
+            entries.push({ date, content });
+            localStorage.setItem('dacapoJournalEntries', JSON.stringify(entries));
+
+            // Clear form and reload entries
+            journalDateInput.value = '';
+            journalContentInput.value = '';
+            loadJournalEntries();
+            showMessage("Entrée enregistrée !", 2000);
+        });
+
+        // --- Bibliothèque Section ---
+        const saveLibExerciceBtn = document.getElementById('save-lib-exercice-btn');
+        const libExerciceNameInput = document.getElementById('lib-exercice-name');
+        const libExerciceDescInput = document.getElementById('lib-exercice-desc');
+        const libraryListDiv = document.getElementById('library-list');
+
+        function loadLibraryItems() {
+            const items = JSON.parse(localStorage.getItem('dacapoLibraryItems') || '[]');
+            libraryListDiv.innerHTML = ''; // Clear existing items
+
+            if (items.length === 0) {
+                 libraryListDiv.innerHTML = '<p class="text-sm text-gray-500 italic">Aucun exercice personnel ajouté.</p>';
+                return;
+            }
+
+            items.forEach((item, index) => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'border-b border-gray-200 pb-2 flex justify-between items-start';
+                itemDiv.innerHTML = `
+                    <div>
+                        <p class="font-medium">${item.name}</p>
+                        <p class="text-sm whitespace-pre-wrap">${item.description}</p>
+                    </div>
+                    <button data-index="${index}" class="remove-lib-item-btn p-1 text-red-600 hover:text-red-800" title="Supprimer">
+                        <span class="lucide text-sm">&#xe03f;</span> </button>
+                `;
+                libraryListDiv.appendChild(itemDiv);
+            });
+
+             // Add event listeners to new remove buttons
+            libraryListDiv.querySelectorAll('.remove-lib-item-btn').forEach(button => {
+                button.addEventListener('click', removeLibraryItem);
+            });
+        }
+
+         function removeLibraryItem(event) {
+            const indexToRemove = parseInt(event.currentTarget.dataset.index, 10);
+            let items = JSON.parse(localStorage.getItem('dacapoLibraryItems') || '[]');
+            items.splice(indexToRemove, 1); // Remove item at the specified index
+            localStorage.setItem('dacapoLibraryItems', JSON.stringify(items));
+            loadLibraryItems(); // Reload the list
+            showMessage("Exercice supprimé.", 2000);
+        }
+
+
+        saveLibExerciceBtn.addEventListener('click', () => {
+            const name = libExerciceNameInput.value.trim();
+            const description = libExerciceDescInput.value.trim();
+
+            if (!name) {
+                 showMessage("Veuillez entrer un nom pour l'exercice.", 3000);
+                return;
+            }
+
+            const items = JSON.parse(localStorage.getItem('dacapoLibraryItems') || '[]');
+            items.push({ name, description });
+            localStorage.setItem('dacapoLibraryItems', JSON.stringify(items));
+
+            // Clear form and reload items
+            libExerciceNameInput.value = '';
+            libExerciceDescInput.value = '';
+            loadLibraryItems();
+            showMessage("Exercice enregistré !", 2000);
+        });
+
+
+        // --- Progrès Section (Basic Calculation) ---
+        function calculateTotalPracticeTime() {
+            // This is a placeholder. Real calculation would need duration per session.
+            // For now, just count journal entries as a proxy (not accurate).
+             const entries = JSON.parse(localStorage.getItem('dacapoJournalEntries') || '[]');
+             // A more realistic approach would involve storing session durations
+             // in the journal or planning section and summing them up.
+             // Let's assume each journal entry represents 30 mins for demo purposes.
+             const totalMinutes = entries.length * 30;
+             const totalHours = (totalMinutes / 60).toFixed(1);
+             const totalTimeSpan = document.getElementById('total-practice-time');
+             if(totalTimeSpan) {
+                totalTimeSpan.textContent = totalHours;
+             }
+        }
+
+
+        // --- Initial Load ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set today's date in date inputs
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('session-date').value = today;
+            document.getElementById('journal-date').value = today;
+
+             // Load data from localStorage
+             loadJournalEntries();
+             loadLibraryItems();
+             calculateTotalPracticeTime(); // Calculate progress on load
+
+             // Initialize timer display
+             updateTimerDisplay();
+
+            // Register Service Worker
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('sw.js')
+                    .then(registration => {
+                        console.log('Service Worker registered avec succès:', registration);
+                    })
+                    .catch(error => {
+                        console.log('Échec de l\'enregistrement du Service Worker:', error);
+                    });
+            }
+        });
+
+    </script>
+</body>
+</html>
